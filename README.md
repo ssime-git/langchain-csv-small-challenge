@@ -1,39 +1,47 @@
-# langchain-csv-small-challenge
-Simple challenge pour l'utilisation de langchain avec un fichier CSV
+### Student Challenge: Using CSV Files in Vector Stores with Langchain
 
-### Défi pour les étudiants : Utilisation de fichiers CSV dans les vector stores avec Langchain
-
-#### Source de Données :
+#### Data Source:
 [FDIC Failed Bank List dataset](https://catalog.data.gov/dataset/fdic-failed-bank-list)
 
-#### Contexte :
-Vous avez été chargé d'identifier les causes de faillite des banques en Caroline du Nord. Pour ce faire, vous utiliserez Langchain pour intégrer des données de fichiers CSV dans des vector stores et réaliser des recherches vectorielles.
+#### Context:
+You have been tasked with identifying the causes of bank failures in North Carolina. To do this, you will use Langchain to integrate CSV file data into vector stores and perform vector searches.
 
-### Objectif Général :
-Explorer comment utiliser les fichiers CSV dans les vector stores avec Langchain pour effectuer des recherches vectorielles et répondre à des questions spécifiques basées sur ces données.
+### General Objective:
+Explore how to use CSV files in vector stores with Langchain to perform vector searches and answer specific questions based on this data.
 
 ---
 
-### Étape 1 : Installer les dépendances
+### Step 1: Install Dependencies
 
-**Objectif** : Préparer l'environnement en installant les bibliothèques nécessaires.
+**Objective**: Prepare the environment by installing the necessary libraries.
 
-**Instructions** :
-- Utilisez `pip` pour installer les bibliothèques `langchain`, `chromadb`, et `sentence-transformers`.
+**Instructions**:
+- Use `pip` to install the libraries `langchain`, `chromadb`, and `sentence-transformers`.
+
+
+<details>
+<summary>Show code</summary>
 
 ```bash
 pip install langchain chromadb sentence-transformers
 ```
 
+</details>
+
+
 ---
 
-### Étape 2 : Créer la fonction d'embedding
+### Step 2: Create the Embedding Function
 
-**Objectif** : Utiliser `SentenceTransformerEmbeddings` pour créer une fonction d'embedding.
+**Objective**: Use `SentenceTransformerEmbeddings` to create an embedding function.
 
-**Instructions** :
-- Importez `SentenceTransformerEmbeddings` depuis `langchain.embeddings.sentence_transformer`.
-- Instanciez `SentenceTransformerEmbeddings` avec le modèle `"all-MiniLM-L6-v2"`.
+**Instructions**:
+- Import `SentenceTransformerEmbeddings` from `langchain.embeddings.sentence_transformer`.
+- Instantiate `SentenceTransformerEmbeddings` with the model `"all-MiniLM-L6-v2"`.
+
+
+<details>
+<summary>Show code</summary>
 
 ```python
 from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddings
@@ -41,18 +49,24 @@ from langchain.embeddings.sentence_transformer import SentenceTransformerEmbeddi
 embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 ```
 
-**Conseil** : Le modèle `"all-MiniLM-L6-v2"` est performant pour créer des embeddings de phrases.
+</details>
+
+**Tip**: The `"all-MiniLM-L6-v2"` model is effective for creating sentence embeddings.
 
 ---
 
-### Étape 3 : Charger les documents depuis le fichier CSV
+### Step 3: Load Documents from the CSV File
 
-**Objectif** : Utiliser `CSVLoader` pour charger les données depuis le fichier CSV.
+**Objective**: Use `CSVLoader` to load data from the CSV file.
 
-**Instructions** :
-- Importez `CSVLoader` depuis `langchain.document_loaders`.
-- Instanciez `CSVLoader` avec le chemin du fichier et l'encodage.
-- Chargez les documents avec `loader.load()`.
+**Instructions**:
+- Import `CSVLoader` from `langchain.document_loaders`.
+- Instantiate `CSVLoader` with the file path and encoding.
+- Load the documents with `loader.load()`.
+
+
+<details>
+<summary>Show code</summary>
 
 ```python
 from langchain.document_loaders import CSVLoader
@@ -61,17 +75,24 @@ loader = CSVLoader("./banklist.csv", encoding="windows-1252")
 documents = loader.load()
 ```
 
-**Conseil** : Assurez-vous que le chemin du fichier est correct et que l'encodage correspond à celui du fichier CSV.
+</details>
+
+
+**Tip**: Ensure the file path is correct and the encoding matches the CSV file.
 
 ---
 
-### Étape 4 : Créer une base de données Chroma à partir des documents
+### Step 4: Create a Chroma Database from Documents
 
-**Objectif** : Utiliser `Chroma.from_documents` pour créer une base de données Chroma à partir des documents et de la fonction d'embedding.
+**Objective**: Use `Chroma.from_documents` to create a Chroma database from the documents and embedding function.
 
-**Instructions** :
-- Importez `Chroma` depuis `langchain.vectorstores`.
-- Utilisez `Chroma.from_documents` avec les documents et la fonction d'embedding.
+**Instructions**:
+- Import `Chroma` from `langchain.vectorstores`.
+- Use `Chroma.from_documents` with the documents and embedding function.
+
+
+<details>
+<summary>Show code</summary>
 
 ```python
 from langchain.vectorstores import Chroma
@@ -79,18 +100,25 @@ from langchain.vectorstores import Chroma
 db = Chroma.from_documents(documents, embedding_function)
 ```
 
-**Conseil** : Vérifiez que les documents sont correctement chargés avant de créer la base de données.
+</details>
+
+
+**Tip**: Verify that the documents are correctly loaded before creating the database.
 
 ---
 
-### Étape 5 : Effectuer une recherche vectorielle
+### Step 5: Perform a Vector Search
 
-**Objectif** : Utiliser `db.similarity_search(query)` pour effectuer une recherche et répondre à une question spécifique.
+**Objective**: Use `db.similarity_search(query)` to perform a search and answer a specific question.
 
-**Instructions** :
-- Définissez une question de recherche.
-- Utilisez `db.similarity_search` pour rechercher la question.
-- Affichez le contenu du document le plus pertinent.
+**Instructions**:
+- Define a search query.
+- Use `db.similarity_search` to search the query.
+- Display the content of the most relevant document.
+
+
+<details>
+<summary>Show code</summary>
 
 ```python
 query = "Did a bank fail in North Carolina?"
@@ -98,34 +126,48 @@ docs = db.similarity_search(query)
 print(docs[0].page_content)
 ```
 
-**Conseil** : La question doit être précise pour obtenir les résultats les plus pertinents.
+</details>
+
+
+**Tip**: The question should be precise to obtain the most relevant results.
 
 ---
 
-### Objectif Avancé : Intégration de Chroma DB avec des données CSV dans une chaîne Langchain
+### Advanced Objective: Integrating Chroma DB with CSV Data in a Langchain Pipeline
 
 ---
 
-### Étape 1 : Installer les dépendances
+### Step 1: Install Dependencies
 
-**Objectif** : Préparer l'environnement en installant des bibliothèques supplémentaires nécessaires pour l'intégration avancée.
+**Objective**: Prepare the environment by installing additional libraries for advanced integration.
 
-**Instructions** :
-- Utilisez `pip` pour installer les bibliothèques `langchain`, `chromadb`, `openai`, et `tiktoken`.
+**Instructions**:
+- Use `pip` to install the libraries `langchain`, `chromadb`, `openai`, and `tiktoken`.
+
+
+<details>
+<summary>Show code</summary>
 
 ```bash
 pip install langchain chromadb openai tiktoken
 ```
 
+</details>
+
+
 ---
 
-### Étape 2 : Créer la fonction d'embedding
+### Step 2: Create the Embedding Function
 
-**Objectif** : Utiliser `OpenAIEmbeddings` pour créer une fonction d'embedding.
+**Objective**: Use `OpenAIEmbeddings` to create an embedding function.
 
-**Instructions** :
-- Importez `OpenAIEmbeddings` depuis `langchain.embeddings`.
-- Instanciez `OpenAIEmbeddings`.
+**Instructions**:
+- Import `OpenAIEmbeddings` from `langchain.embeddings`.
+- Instantiate `OpenAIEmbeddings`.
+
+
+<details>
+<summary>Show code</summary>
 
 ```python
 from langchain.embeddings import OpenAIEmbeddings
@@ -133,16 +175,23 @@ from langchain.embeddings import OpenAIEmbeddings
 embedding_function = OpenAIEmbeddings()
 ```
 
+</details>
+
+
 ---
 
-### Étape 3 : Charger les documents depuis le fichier CSV
+### Step 3: Load Documents from the CSV File
 
-**Objectif** : Utiliser `CSVLoader` pour charger les données depuis le fichier CSV.
+**Objective**: Use `CSVLoader` to load data from the CSV file.
 
-**Instructions** :
-- Importez `CSVLoader` depuis `langchain.document_loaders`.
-- Instanciez `CSVLoader` avec le chemin du fichier et l'encodage.
-- Chargez les documents avec `loader.load()`.
+**Instructions**:
+- Import `CSVLoader` from `langchain.document_loaders`.
+- Instantiate `CSVLoader` with the file path and encoding.
+- Load the documents with `loader.load()`.
+
+
+<details>
+<summary>Show code</summary>
 
 ```python
 from langchain.document_loaders import CSVLoader
@@ -151,15 +200,22 @@ loader = CSVLoader("./banklist.csv", encoding="windows-1252")
 documents = loader.load()
 ```
 
+</details>
+
+
 ---
 
-### Étape 4 : Créer une base de données Chroma à partir des documents
+### Step 4: Create a Chroma Database from Documents
 
-**Objectif** : Utiliser `Chroma.from_documents` pour créer une base de données Chroma à partir des documents et de la fonction d'embedding.
+**Objective**: Use `Chroma.from_documents` to create a Chroma database from the documents and embedding function.
 
-**Instructions** :
-- Importez `Chroma` depuis `langchain.vectorstores`.
-- Utilisez `Chroma.from_documents` avec les documents et la fonction d'embedding.
+**Instructions**:
+- Import `Chroma` from `langchain.vectorstores`.
+- Use `Chroma.from_documents` with the documents and embedding function.
+
+
+<details>
+<summary>Show code</summary>
 
 ```python
 from langchain.vectorstores import Chroma
@@ -167,16 +223,23 @@ from langchain.vectorstores import Chroma
 db = Chroma.from_documents(documents, embedding_function)
 ```
 
+</details>
+
+
 ---
 
-### Étape 5 : Configurer le retriever et le pipeline de question-réponse
+### Step 5: Configure the Retriever and Question-Answer Pipeline
 
-**Objectif** : Configurer un retriever pour récupérer les documents et créer un pipeline de question-réponse en utilisant un modèle de chat.
+**Objective**: Configure a retriever to retrieve documents and create a question-answer pipeline using a chat model.
 
-**Instructions** :
-- Importez les modules nécessaires pour le modèle de chat, le prompt template, et les parsers.
-- Configurez le retriever, le prompt template, et le modèle de chat.
-- Créez le pipeline de question-réponse.
+**Instructions**:
+- Import the necessary modules for the chat model, prompt template, and parsers.
+- Configure the retriever, prompt template, and chat model.
+- Create the question-answer pipeline.
+
+
+<details>
+<summary>Show code</summary>
 
 ```python
 from langchain.chat_models import ChatOpenAI
@@ -204,8 +267,11 @@ chain = (
 print(chain.invoke("What bank failed in North Carolina?"))
 ```
 
-**Conseil** : Vérifiez que chaque composant du pipeline est correctement configuré pour assurer une intégration fluide.
+</details>
+
+
+**Tip**: Ensure each component of the pipeline is correctly configured for smooth integration.
 
 ---
 
-Utilisez ces instructions pour réaliser l'exercice et explorez comment les embeddings et les recherches vectorielles peuvent être intégrés dans vos projets de machine learning. Pour plus de détails, consultez [ce lien](https://how.wtf/how-to-use-csv-files-in-vector-stores-with-langchain.html).
+Use these instructions to complete the exercise and explore how embeddings and vector searches can be integrated into your machine learning projects. For more details, see [this link](https://how.wtf/how-to-use-csv-files-in-vector-stores-with-langchain.html).
